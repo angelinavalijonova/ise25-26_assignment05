@@ -1,0 +1,53 @@
+### GET request to read all POS
+GET http://localhost:8080/api/pos
+
+###
+GET http://localhost:8080/api/pos/4
+
+###
+GET http://localhost:8080/api/pos/filter?name=Café Botanik
+
+###
+
+# curl --request POST --header "Content-Type: application/json" --data '{"name":"New Café","description":"Description","type":"CAFE","campus":"ALTSTADT","street":"Hauptstraße","houseNumber":"100","postalCode":69117,"city":"Heidelberg"}' http://localhost:8080/api/pos
+POST http://localhost:8080/api/pos
+Content-Type: application/json
+
+{
+  "name": "New Café",
+  "description": "Description",
+  "type": "CAFE",
+  "campus": "ALTSTADT",
+  "street": "Hauptstraße",
+  "houseNumber": "100",
+  "postalCode": 69117,
+  "city": "Heidelberg"
+}
+
+###
+
+# curl --request POST --header "Content-Type: application/json" --data '"ALTSTADT"' http://localhost:8080/api/pos/import/osm/5589879349
+POST http://localhost:8080/api/pos/import/osm/1864600236
+Content-Type: application/json
+
+"ALTSTADT"
+
+###
+# curl --header "Content-Type: application/json" --request PUT --data '{"id":4,"name":"New coffee","description":"Great croissants","type":"CAFE","campus":"ALTSTADT","street":"Hauptstraße","houseNumber":"95","postalCode":69117,"city":"Heidelberg"}' http://localhost:8080/api/pos/4
+PUT http://localhost:8080/api/pos/4
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "New coffee",
+  "description": "Great croissants - bad coffee",
+  "type": "CAFE",
+  "campus": "ALTSTADT",
+  "street": "Hauptstraße",
+  "houseNumber": "95",
+  "postalCode": 69117,
+  "city": "Heidelberg"
+}
+
+###
+

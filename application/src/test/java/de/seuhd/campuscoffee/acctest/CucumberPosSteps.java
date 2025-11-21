@@ -17,6 +17,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,11 @@ public class CucumberPosSteps {
         List<PosDto> retrievedPosList = retrievePos();
         assertThat(retrievedPosList).isEmpty();
     }
-
-    // TODO: Add Given step for new scenario
+    @Given("the following POS already exist")
+    public void theFollowingPosAlreadyExist(List<PosDto> posList) {
+        createdPosList = createPos(posList);
+        assertThat(createdPosList).hasSize(posList.size());
+    }
 
     // When -----------------------------------------------------------------------
 
@@ -100,8 +104,24 @@ public class CucumberPosSteps {
         createdPosList = createPos(posList);
         assertThat(createdPosList).size().isEqualTo(posList.size());
     }
+    @When("I update the POS {string} with the description {string}")
+    public void iUpdateThePosWithDescription(String name, String newDescription) {
+        PosDto original = retrievePosByName(name);
 
-    // TODO: Add When step for new scenario
+        PosDto updatedRequest = PosDto.builder()
+                .id(original.id())
+                .name(original.name())
+                .description(newDescription)
+                .type(original.type())
+                .campus(original.campus())
+                .street(original.street())
+                .houseNumber(original.houseNumber())
+                .postalCode(original.postalCode())
+                .city(original.city())
+                .build();
+
+        updatedPos = updatePos(Collections.singletonList(updatedRequest)).getFirst();
+    }
 
     // Then -----------------------------------------------------------------------
 
@@ -112,6 +132,9 @@ public class CucumberPosSteps {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id", "createdAt", "updatedAt")
                 .containsExactlyInAnyOrderElementsOf(createdPosList);
     }
-
-    // TODO: Add Then step for new scenario
+    @Then("the POS {string} should have the description {string}")
+    public void thePosShouldHaveDescription(String name, String expectedDescription) {
+        PosDto pos = retrievePosByName(name);
+        assertThat(pos.description()).isEqualTo(expectedDescription);
+    }
 }

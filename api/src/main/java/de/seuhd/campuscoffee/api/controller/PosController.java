@@ -34,6 +34,14 @@ public class PosController {
         );
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<PosDto> getWithFilter(
+            @RequestParam("name") String name) {
+        return ResponseEntity.ok(
+                posDtoMapper.fromDomain(posService.getByName(name))
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PosDto> getById(
             @PathVariable Long id) {
@@ -41,8 +49,6 @@ public class PosController {
                 posDtoMapper.fromDomain(posService.getById(id))
         );
     }
-
-    // TODO: Implement a new GET endpoint that supports filtering POS by name, e.g., /filter?name=Schmelzpunkt
 
     @PostMapping("")
     public ResponseEntity<PosDto> create(

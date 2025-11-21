@@ -54,6 +54,21 @@ public class PosSystemTests extends AbstractSysTest {
     }
 
     @Test
+    void getPosByName() {
+        List<Pos> createdPosList = TestFixtures.createPosFixtures(posService);
+        Pos createdPos = createdPosList.getFirst();
+
+        Pos retrievedPos = posDtoMapper.toDomain(
+                TestUtils.retrievePosByName(createdPos.name())
+        );
+
+        assertThat(retrievedPos)
+                .usingRecursiveComparison()
+                .ignoringFields("createdAt", "updatedAt") // prevent issues due to differing timestamps after conversions
+                .isEqualTo(createdPos);
+    }
+
+    @Test
     void updatePos() {
         List<Pos> createdPosList = TestFixtures.createPosFixtures(posService);
         Pos posToUpdate = createdPosList.getFirst();
